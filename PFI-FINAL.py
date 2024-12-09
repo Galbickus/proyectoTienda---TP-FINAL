@@ -21,4 +21,4 @@ def inicializar_bbdd():
     conexion.commit()
     conexion.close()
     
-    inicializar_bbdd()
+inicializar_bbdd()
