@@ -91,3 +91,24 @@ def registrar_producto():
     finally:
         conexion.close()
 
+
+
+#PROGRAMA PRINCIPAL
+if __name__ == "__main__":
+    inicializar_bbdd()
+
+    while True:
+        mostrar_menu()
+
+        try:
+            opcion= int(input("Seleccione una opción (1-7):"))
+
+            if opcion == 7:
+                print("Saliendo del sistema. ¡Hasta pronto!")
+                break
+            elif opcion == 1:
+                registrar_producto()
+            else:
+                print("Opción no váida. Por favor, seleccione entre 1 y 7.")
+        except ValueError: 
+            print("Opción no válida. Por favor, ingrese un valor numérico.")
