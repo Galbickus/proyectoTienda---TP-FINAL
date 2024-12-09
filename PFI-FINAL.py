@@ -91,8 +91,6 @@ def registrar_producto():
     finally:
         conexion.close()
 
-
-
 #PROGRAMA PRINCIPAL
 if __name__ == "__main__":
     inicializar_bbdd()
