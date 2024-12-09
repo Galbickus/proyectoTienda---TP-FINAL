@@ -61,3 +61,8 @@ def registrar_producto():
                 print("Entrada inválida. El stock no puede ser negativo.")
         except ValueError:
             print("Entrada inválida. Debe ingresar un valor numérico entero mayor a 0.")
+
+    categoria= input("Categoría del producto:").strip()
+
+    conexion= sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
+    cursor= conexion.cursor()
