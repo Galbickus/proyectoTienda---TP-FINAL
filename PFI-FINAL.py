@@ -66,3 +66,28 @@ def registrar_producto():
 
     conexion= sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
     cursor= conexion.cursor()
+
+    try:
+        cursor.execute('''
+            INSERT INTO productos (Código, Nombre, Descripción, Cantidad, Precio, Categoria)
+            
+            VALUES (NULL, ?, ?, ?, ?, ?)''',
+            (nombre, descripcion, cantidad, precio, categoria)
+        )
+
+        id_producto= cursor.lastrowid
+        codigo= f"PROD{id_producto}"
+
+        cursor.execute('''
+        UPDATE productos SET Código = ? WHERE id = ?''',
+        (codigo, id_producto))
+
+        conexion.commit()
+        print(f"Producto registrado con éxito. Código asignado: {codigo}")
+
+    except sqlite3.IntegrityError:
+        print("Error. No se pudo registrar el producto.")
+
+    finally:
+        conexion.close()
+
