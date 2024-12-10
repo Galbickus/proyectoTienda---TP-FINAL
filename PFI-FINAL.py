@@ -1,7 +1,6 @@
 import sqlite3
 
 #CREAR LA BASE DATOS Y LA TABLA DE PRODUCTOS.
-
 def inicializar_bbdd():
     conexion= sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
     cursor= conexion.cursor()
@@ -23,7 +22,6 @@ def inicializar_bbdd():
     
 # inicializar_bbdd()
 # una vez creada la bbdd borramos el llamado a la función inicializar
-
 #CREACIÓN DEL MENÚ DE OPCIONES.
 def mostrar_menu():
     """Muestra el menú principal."""
@@ -35,7 +33,7 @@ def mostrar_menu():
     print("5. Listado: Listado completo de los productos en la base de datos.")
     print("6. Reporte de Bajo Stock: Lista de productos con cantidad bajo mínimo.")
     print("7. Salir.")
-
+# FUNCION REGISTRAR PRODUCTOS
 def registrar_producto():
     print("\n --- Registro de Producto Nuevo ---")
 
@@ -91,6 +89,34 @@ def registrar_producto():
     finally:
         conexion.close()
 
+
+# FUNCION BUSCAR PRODUCTO POR CODIGO
+def buscar_producto():
+    print("\n --- Busqueda de Producto ---")
+    codigo= input("Ingrese el código del producto que desea buscar: ").strip()
+    
+    conexion= sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
+    cursor= conexion.cursor()
+    cursor.execute("SELECT * FROM productos WHERE Código= ?",(codigo,))
+    producto= cursor.fetchone()
+    
+    conexion.close()
+    
+    if producto:
+        _, codigo, nombre, descripcion, cantidad, precio, categoria =producto
+        print(f"\nProducto encontrado con el código: {codigo}")
+        print(f"Nombre      :   {nombre}")
+        print(f"Descripcion :   {descripcion}")
+        print(f"Cantidad    :   {cantidad}")
+        print(f"Precio      :   $ {precio}")
+        print(f"Categoría   :   {categoria}")
+    else:
+        print(f"No se encontró el producto registrado bajo el código: {codigo}")
+
+
+
+
+
 #PROGRAMA PRINCIPAL
 if __name__ == "__main__":
     inicializar_bbdd()
@@ -106,6 +132,8 @@ if __name__ == "__main__":
                 break
             elif opcion == 1:
                 registrar_producto()
+            elif opcion == 2:
+                buscar_producto()
             else:
                 print("Opción no váida. Por favor, seleccione entre 1 y 7.")
         except ValueError: 
