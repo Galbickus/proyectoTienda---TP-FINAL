@@ -90,7 +90,7 @@ def registrar_producto():
         conexion.close()
 
 
-# FUNCION BUSCAR PRODUCTO POR CODIGO
+# FUNCION BUSCAR UN PRODUCTO POR CODIGO (opcion2)
 def buscar_producto():
     print("\n --- Busqueda de Producto ---")
     codigo= input("Ingrese el código del producto que desea buscar: ").strip()
@@ -113,7 +113,26 @@ def buscar_producto():
     else:
         print(f"No se encontró el producto registrado bajo el código: {codigo}")
 
-
+# FUNCION LISTAR PRODUCTOS(opcion 5)
+def listar_productos():
+    print("\n --- LISTA DE PRODUCTOS ---")
+    conexion= sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
+    cursor= conexion.cursor()
+    cursor.execute("SELECT * FROM productos")
+    productos= cursor.fetchall()
+    conexion.close()
+    
+    if not productos:
+        print("El inventario está vacío.")
+    else:
+        for _, codigo, nombre, descripcion, cantidad, precio, categoria in productos:
+            print(f"\nCódigo:           {codigo}")
+            print(f"Nombre:         {nombre}")
+            print(f"Descripcion:    {descripcion}")
+            print(f"Cantidad:       {cantidad}")
+            print(f"Precio:         $ {precio}")
+            print(f"Categoría:      {categoria}")
+            print("\n ------\n")       
 
 
 
@@ -134,6 +153,8 @@ if __name__ == "__main__":
                 registrar_producto()
             elif opcion == 2:
                 buscar_producto()
+            elif opcion == 5:
+                listar_productos()
             else:
                 print("Opción no váida. Por favor, seleccione entre 1 y 7.")
         except ValueError: 
