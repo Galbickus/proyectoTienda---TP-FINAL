@@ -34,6 +34,7 @@ Para ejecutar este proyecto, necesitas tener instalado:
 4. **Otras opciones:** Para realizar otras operaciones, simplemente selecciona el número correspondiente en el menú.
 
 
-![bbdd](https://github.com/user-attachments/assets/8dad647f-be70-4917-9433-fe3abc94a7b0)
-
 ![menu](https://github.com/user-attachments/assets/2af7984d-3f85-4863-bdba-32d0ceab5554)
+
+![bbdd](https://github.com/user-attachments/assets/0e7c7783-f972-4bb2-94d6-a4efaea41965)
+
