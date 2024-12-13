@@ -24,15 +24,15 @@ def inicializar_bbdd():
 # una vez creada la bbdd borramos el llamado a la función inicializar
 #CREACIÓN DEL MENÚ DE OPCIONES.
 def mostrar_menu():
-    """Muestra el menú principal."""
-    print("Menú para la Gestión de Productos:\n")
+    """\nMuestra el menú principal."""
+    print("\nMenú para la Gestión de Productos:\n")
     print("1. Registro: Alta de productos nuevos.")
     print("2. Búsqueda: Consulta de datos de un producto específico.")
     print("3. Actualización: Modificar los datos de un producto.")
     print("4. Eliminación: Dar de baja productos.")
     print("5. Listado: Listado completo de los productos en la base de datos.")
     print("6. Reporte de Bajo Stock: Lista de productos con cantidad bajo mínimo.")
-    print("7. Salir.")
+    print("7. Salir.\n")
 # FUNCION REGISTRAR PRODUCTOS
 def registrar_producto():
     print("\n --- Registro de Producto Nuevo ---")
@@ -202,6 +202,43 @@ def actualizar_producto():
 
     finally:
         conexion.close()
+        
+# FUNCION PARA ELIMINAR UN PRODUCTO (opción 4)
+
+def eliminar_producto():
+    print("\n --- Eliminación de Producto ---\n")
+    
+    codigo = input("Ingrese el código del producto a eliminar: ").strip()
+
+    conexion = sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
+    cursor = conexion.cursor()
+
+    # Verificar si el producto existe
+    cursor.execute("SELECT * FROM productos WHERE Código = ?", (codigo,))
+    producto = cursor.fetchone()
+
+    if not producto:
+        print(f"No se encontró ningún producto con el código: {codigo}")
+        conexion.close()
+        return
+
+    # Confirmación antes de eliminar
+    confirmacion = input(f"¿Está seguro de que desea eliminar el producto con código {codigo}? (s/n): ").strip().lower()
+    if confirmacion != 's':
+        print("Operación cancelada.")
+        conexion.close()
+        return
+
+    try:
+        cursor.execute("DELETE FROM productos WHERE Código = ?", (codigo,))
+        conexion.commit()
+        print("Producto eliminado con éxito.\n")
+
+    except sqlite3.Error as e:
+        print(f"Error al eliminar el producto: {e}")
+
+    finally:
+        conexion.close()
 
 
 #PROGRAMA PRINCIPAL
@@ -223,9 +260,11 @@ if __name__ == "__main__":
                 buscar_producto()
             elif opcion == 3:
                 actualizar_producto()
+            elif opcion == 4:
+                eliminar_producto()
             elif opcion == 5:
                 listar_productos()
             else:
                 print("Opción no váida. Por favor, seleccione entre 1 y 7.")
         except ValueError: 
-            print("Opción no válida. Por favor, ingrese un valor numérico.")
+            print("Opción no válida. Por favor, ingrese un valor numérico.\n")
