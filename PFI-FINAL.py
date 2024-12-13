@@ -135,6 +135,74 @@ def listar_productos():
             print("\n ------\n")       
 
 
+#FUNCION PARA ACTUALIZAR UN PRODUCTO (opcion 3)
+
+def actualizar_producto():
+    print("\n --- Actualización de Producto ---")
+    
+    codigo = input("Ingrese el código del producto a actualizar: ").strip()
+
+    conexion = sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
+    cursor = conexion.cursor()
+
+    # Verificar si el producto existe
+    cursor.execute("SELECT * FROM productos WHERE Código = ?", (codigo,))
+    producto = cursor.fetchone()
+
+    if not producto:
+        print(f"No se encontró ningún producto con el código: {codigo}")
+        conexion.close()
+        return
+
+    _, codigo, nombre, descripcion, cantidad, precio, categoria = producto
+
+    print("\nProducto encontrado. Deje el campo vacío si no desea modificarlo.")
+    
+    nuevo_nombre = input(f"Nombre actual ({nombre}): ").strip() or nombre
+    nueva_descripcion = input(f"Descripción actual ({descripcion}): ").strip() or descripcion
+
+    while True:
+        try:
+            nueva_cantidad = input(f"Cantidad actual ({cantidad}): ").strip()
+            nueva_cantidad = int(nueva_cantidad) if nueva_cantidad else cantidad
+            if nueva_cantidad >= 0:
+                break
+            else:
+                print("La cantidad no puede ser negativa.")
+        except ValueError:
+            print("Debe ingresar un valor numérico entero.")
+
+    while True:
+        try:
+            nuevo_precio = input(f"Precio actual (${precio}): ").strip()
+            nuevo_precio = float(nuevo_precio) if nuevo_precio else precio
+            if nuevo_precio > 0:
+                break
+            else:
+                print("El precio debe ser mayor a 0.")
+        except ValueError:
+            print("Debe ingresar un valor numérico decimal.")
+
+    nueva_categoria = input(f"Categoría actual ({categoria}): ").strip() or categoria
+
+    # Actualizar en la base de datos
+    try:
+        cursor.execute('''
+            UPDATE productos
+            SET Nombre = ?, Descripción = ?, Cantidad = ?, Precio = ?, Categoria = ?
+            WHERE Código = ?''',
+            (nuevo_nombre, nueva_descripcion, nueva_cantidad, nuevo_precio, nueva_categoria, codigo)
+        )
+
+        conexion.commit()
+        print("Producto actualizado con éxito.")
+
+    except sqlite3.Error as e:
+        print(f"Error al actualizar el producto: {e}")
+
+    finally:
+        conexion.close()
+
 
 #PROGRAMA PRINCIPAL
 if __name__ == "__main__":
@@ -153,6 +221,8 @@ if __name__ == "__main__":
                 registrar_producto()
             elif opcion == 2:
                 buscar_producto()
+            elif opcion == 3:
+                actualizar_producto()
             elif opcion == 5:
                 listar_productos()
             else:
