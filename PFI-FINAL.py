@@ -33,7 +33,7 @@ def mostrar_menu():
     print("5. Listado: Listado completo de los productos en la base de datos.")
     print("6. Reporte de Bajo Stock: Lista de productos con cantidad bajo mínimo.")
     print("7. Salir.\n")
-# FUNCION REGISTRAR PRODUCTOS
+# FUNCION REGISTRAR PRODUCTOS (opcion 1)
 def registrar_producto():
     print("\n --- Registro de Producto Nuevo ---")
 
@@ -240,6 +240,41 @@ def eliminar_producto():
     finally:
         conexion.close()
 
+# FUNCION DE REPORTE DE BAJO STOCK (opcion 6)
+
+def reporte_bajo_stock():
+    print("\n --- Reporte de Bajo Stock ---")
+    
+    while True:
+        try:
+            limite = int(input("Ingrese el límite de stock para el reporte: "))
+            if limite >= 0:
+                break
+            print("El límite de stock no puede ser negativo. Inténtelo de nuevo.")
+        except ValueError:
+            print("Entrada inválida. Debe ser un número entero.")
+
+    conexion = sqlite3.connect("C:\\Users\\ASUS\\Desktop\\proyectoTienda - TP FINAL\\inventario.db")
+    cursor = conexion.cursor()
+
+    cursor.execute("SELECT * FROM productos WHERE Cantidad <= ?", (limite,))
+    productos = cursor.fetchall()
+
+    conexion.close()
+
+    if not productos:
+        print("\nNo hay productos con stock igual o inferior al límite especificado.")
+    else:
+        print(f"\nProductos con stock igual o inferior a {limite}:")
+        for _, codigo, nombre, descripcion, cantidad, precio, categoria in productos:
+            print(f"\nCódigo: {codigo}")
+            print(f"  Nombre      : {nombre}")
+            print(f"  Descripción : {descripcion}")
+            print(f"  Cantidad    : {cantidad}")
+            print(f"  Precio      : ${precio:.2f}")
+            print(f"  Categoría   : {categoria}")
+            print("-" * 50)
+
 
 #PROGRAMA PRINCIPAL
 if __name__ == "__main__":
@@ -264,6 +299,8 @@ if __name__ == "__main__":
                 eliminar_producto()
             elif opcion == 5:
                 listar_productos()
+            elif opcion == 6:
+                reporte_bajo_stock()
             else:
                 print("Opción no váida. Por favor, seleccione entre 1 y 7.")
         except ValueError: 
